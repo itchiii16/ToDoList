@@ -8,13 +8,6 @@
 
   <p align="center">
     A minimal, beautiful, and feature-rich To-Do List Dashboard built with Vanilla JavaScript.
-    <br />
-    <br />
-    <a href="#demo">View Demo</a>
-    ·
-    <a href="#features">Report Bug</a>
-    ·
-    <a href="#features">Request Feature</a>
   </p>
 </div>
 
@@ -56,7 +49,7 @@ To run this project locally, you don't need to install anything complex. It runs
 
 1.  **Clone the repo**
     ```sh
-    git clone [https://github.com/itchiii16/automataproject.git](https://github.com/itchiii16/automataproject.git)
+    git clone https://github.com/itchiii16/ToDoList.git
     ```
 2.  **Navigate to the project folder**
 3.  **Open `index.html`** in your browser.
