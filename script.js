@@ -1,9 +1,49 @@
+// --- INITIAL SETUP ---
 document.addEventListener("DOMContentLoaded", () => {
+
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+    updateThemeIcons();
+    
     loadTasks();
     loadActivity();
 });
 
-// --- MAIN TASK LOGIC ---
+function goToDashboard() {
+    document.getElementById("landingPage").style.display = "none";
+    document.getElementById("dashboardPage").style.display = "block";
+    refreshDashboard();
+}
+
+function goToLanding() {
+    document.getElementById("dashboardPage").style.display = "none";
+    document.getElementById("landingPage").style.display = "flex";
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+    
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+    updateThemeIcons();
+}
+
+function updateThemeIcons() {
+    const isDark = document.body.classList.contains("dark-mode");
+    const buttons = document.querySelectorAll(".btn-theme");
+
+    buttons.forEach(btn => {
+        if (isDark) {
+            btn.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            btn.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+    });
+}
 
 function addTask() {
     let input = document.getElementById("taskInput");
@@ -12,12 +52,11 @@ function addTask() {
 
     if (text === "") return;
 
-    // NEW: Status is now a string ('todo'), not a boolean
     const task = {
         id: Date.now(),
         text: text,
         category: categorySelect.value,
-        status: 'todo' // Default status
+        status: 'todo'
     };
 
     saveTask(task);
@@ -26,17 +65,14 @@ function addTask() {
     refreshDashboard();
 }
 
-// NEW: Function to handle the Dropdown Change
 function updateStatus(id, newStatus) {
     let tasks = getTasks();
     let task = tasks.find(t => t.id === id);
     
     if (task) {
-        let oldStatus = task.status;
-        task.status = newStatus; // Update status
+        task.status = newStatus;
         localStorage.setItem("tasks", JSON.stringify(tasks));
         
-        // Log nice messages
         if(newStatus === 'done') logActivity(`Completed "${task.text}"`);
         else if(newStatus === 'doing') logActivity(`Started "${task.text}"`);
         else logActivity(`Reset "${task.text}" to To Do`);
@@ -52,8 +88,6 @@ function deleteTask(id) {
     refreshDashboard();
 }
 
-// --- RENDERING & CALCULATIONS ---
-
 function refreshDashboard() {
     renderList();
     updateStats();
@@ -68,15 +102,11 @@ function renderList() {
     tasks.forEach(task => {
         let li = document.createElement("li");
         
-        // Determine class for styling based on status
         let statusClass = 'status-' + task.status; 
         
         li.innerHTML = `
             <div class="task-left">
-                <select 
-                    class="status-select ${statusClass}" 
-                    onchange="updateStatus(${task.id}, this.value)"
-                >
+                <select class="status-select ${statusClass}" onchange="updateStatus(${task.id}, this.value)">
                     <option value="todo" ${task.status === 'todo' ? 'selected' : ''}>To Do</option>
                     <option value="doing" ${task.status === 'doing' ? 'selected' : ''}>In Progress</option>
                     <option value="done" ${task.status === 'done' ? 'selected' : ''}>Done</option>
@@ -97,8 +127,6 @@ function renderList() {
 function updateStats() {
     let tasks = getTasks();
     let total = tasks.length;
-    
-    // Count based on the new string status
     let completed = tasks.filter(t => t.status === 'done').length;
     let progress = tasks.filter(t => t.status === 'doing').length;
     let urgent = tasks.filter(t => t.category === 'urgent' && t.status !== 'done').length;
@@ -123,7 +151,7 @@ function updateCharts() {
         document.getElementById("progressText").innerText = `${completed} of ${total} completed`;
     }
 
-    let categories = ["work", "personal", "school", "urgent"];
+    let categories = ["work", "personal", "school", "ideas", "urgent"];
     let catContainer = document.getElementById("categoryList");
     if(catContainer) {
         catContainer.innerHTML = "";
@@ -146,8 +174,6 @@ function updateCharts() {
         });
     }
 }
-
-// --- ACTIVITY & HELPERS ---
 
 function logActivity(message) {
     let activities = JSON.parse(localStorage.getItem("activity")) || [];
@@ -180,14 +206,14 @@ function saveTask(task) {
 function getCategoryColor(cat) {
     if(cat === "work") return "#1e40af";
     if(cat === "personal") return "#86198f";
-    if(cat === "school") return "#854d0e";
+    if(cat === "school") return "#f97316"; // Orange
+    if(cat === "ideas") return "#854d0e";
     if(cat === "urgent") return "#991b1b";
     return "#ccc";
 }
 
 function loadTasks() { refreshDashboard(); }
 
-// --- MODAL FUNCTIONS (Updated for new status) ---
 function openModal(filterType) {
     let tasks = getTasks();
     let modal = document.getElementById("taskModal");
@@ -197,7 +223,6 @@ function openModal(filterType) {
     modalList.innerHTML = "";
     let filteredTasks = [];
 
-    // Filter Logic using new 'status' string
     if (filterType === 'all') {
         filteredTasks = tasks;
         modalTitle.innerText = "All Tasks";

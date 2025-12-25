@@ -3,16 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard</title>
+    <title>TDL - Productivity Companion</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <div class="dashboard-container">
+    <div id="landingPage" class="landing-container">
+        
+        <div class="landing-header">
+            <button onclick="toggleTheme()" class="btn-theme" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <div class="hero-content">
+            <div class="logo-box">
+                <img src="logo.png" alt="TDL Logo" class="hero-logo">
+            </div>
+            
+            <h1>Hi, Let's Get Started</h1>
+            <p class="hero-sub">Meet TDL - Your To-Do List Companion<br>Stay organized, focused, and productive.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="f-icon blue"><i class="fas fa-layer-group"></i></div>
+                    <h4>Simple & Clean</h4>
+                    <p>A minimal interface that helps you focus on what matters.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="f-icon purple"><i class="fas fa-tags"></i></div>
+                    <h4>Smart Tags</h4>
+                    <p>Organize tasks with colorful, customizable categories.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="f-icon green"><i class="fas fa-chart-line"></i></div>
+                    <h4>Track Progress</h4>
+                    <p>Monitor your productivity with beautiful dashboards.</p>
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="goToDashboard()">
+                Get Started <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="dashboardPage" class="dashboard-container" style="display: none;">
         <header>
-            <h1>Dashboard</h1>
-            <p class="subtitle">Track your tasks and productivity</p>
+            <div class="header-content">
+                <div class="brand-container">
+                    <div class="dash-icon-box" onclick="goToLanding()" title="Back to Home">
+                        <img src="logo.png" class="dash-logo-small" alt="Logo">
+                    </div>
+                    <div class="header-text">
+                        <h1>Dashboard</h1>
+                        <p class="subtitle">Track your tasks and productivity</p>
+                    </div>
+                </div>
+
+                <div class="header-controls">
+                    <button onclick="toggleTheme()" class="btn-theme" title="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button onclick="goToLanding()" class="btn-back">
+                        <i class="fas fa-sign-out-alt"></i> Exit
+                    </button>
+                </div>
+            </div>
         </header>
 
         <div class="stats-grid">
@@ -47,7 +105,6 @@
         </div>
 
         <div class="main-grid">
-            
             <div class="left-col">
                 <div class="card add-section">
                     <h3>Quick Add Task</h3>
@@ -57,6 +114,7 @@
                             <option value="work">Work</option>
                             <option value="personal">Personal</option>
                             <option value="school">School</option>
+                            <option value="ideas">Ideas</option>
                             <option value="urgent">Urgent</option>
                         </select>
                         <button onclick="addTask()">Add Task</button>
@@ -68,37 +126,28 @@
                         <h3>All Tasks</h3>
                         <span class="count-badge" id="listCount">0 total</span>
                     </div>
-                    <ul id="taskList">
-                        </ul>
+                    <ul id="taskList"></ul>
                 </div>
             </div>
 
             <div class="right-col">
-                
                 <div class="card progress-card">
                     <h3>Overall Progress</h3>
                     <div class="chart-container">
                         <div class="donut-chart" id="donutChart">
-                            <div class="inner-circle">
-                                <span id="percentText">0%</span>
-                            </div>
+                            <div class="inner-circle"><span id="percentText">0%</span></div>
                         </div>
                     </div>
                     <p class="chart-sub" id="progressText">0 of 0 completed</p>
                 </div>
-
                 <div class="card category-card">
                     <h3>By Category</h3>
-                    <div id="categoryList">
-                        </div>
+                    <div id="categoryList"></div>
                 </div>
-
                 <div class="card activity-card">
                     <h3>Recent Activity</h3>
-                    <ul id="activityList">
-                        </ul>
+                    <ul id="activityList"></ul>
                 </div>
-
             </div>
         </div>
     </div>
@@ -109,8 +158,7 @@
                 <h2 id="modalTitle">Task Details</h2>
                 <span class="close-btn" onclick="closeModal()">&times;</span>
             </div>
-            <ul id="modalList">
-                </ul>
+            <ul id="modalList"></ul>
         </div>
     </div>
 
